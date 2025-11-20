@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
-import { useKV } from "@github/spark/hooks"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/but
+import { Textarea } from "@/components/ui/texta
+import { Card } from "@/components/ui/card"
+import { 
+  FloppyDisk, 
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
@@ -58,7 +58,7 @@ interface SiteContent {
     email: string
     copyright: string
   }
-}
+ 
 
 const defaultContent: SiteContent = {
   hero: {
@@ -116,7 +116,7 @@ const defaultContent: SiteContent = {
     phone: "+55 11 99999-9999",
     email: "contato@exemplo.com",
     copyright: "© 2024 Ana Paula Carneiro. Todos os direitos reservados."
-  }
+   
 }
 
 interface AdminPanelProps {
@@ -131,75 +131,75 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     toast.success("Alterações salvas com sucesso!")
   }
 
-  const updateHero = (field: keyof SiteContent["hero"], value: string) => {
-    setContent((current) => ({
-      ...current,
-      hero: { ...current.hero, [field]: value }
-    }))
-  }
-
-  const updateAbout = (field: string, value: string | string[]) => {
-    setContent((current) => ({
-      ...current,
-      about: { ...current.about, [field]: value }
-    }))
-  }
-
-  const updateAboutBio = (index: number, value: string) => {
-    setContent((current) => {
-      const newBio = [...current.about.bio]
-      newBio[index] = value
-      return {
-        ...current,
-        about: { ...current.about, bio: newBio }
-      }
-    })
-  }
-
-  const addAboutBioParagraph = () => {
-    setContent((current) => ({
-      ...current,
-      about: {
-        ...current.about,
         bio: [...current.about.bio, ""]
-      }
     }))
-  }
 
-  const removeAboutBioParagraph = (index: number) => {
     setContent((current) => ({
-      ...current,
-      about: {
-        ...current.about,
-        bio: current.about.bio.filter((_, i) => i !== index)
-      }
-    }))
-  }
+      a
+   
 
-  const updateAboutCredential = (index: number, field: "title" | "description", value: string) => {
+
     setContent((current) => {
-      const newCredentials = [...current.about.credentials]
-      newCredentials[index] = { ...newCredentials[index], [field]: value }
-      return {
+      newCredenti
         ...current,
-        about: { ...current.about, credentials: newCredentials }
       }
-    })
   }
 
-  const addAboutCredential = () => {
-    setContent((current) => ({
       ...current,
-      about: {
         ...current.about,
-        credentials: [...current.about.credentials, { title: "", description: "" }]
       }
-    }))
   }
+  const remove
+      ...current,
+        ...current.about,
+      }
+  }
+  c
+
+      return {
+        services: { ...current
+    })
+
+    setContent((current) 
+      services: {
+       
+    }))
+
+
+      services: {
+        items: current.service
+    }))
+
+    setContent((current) 
+      newTestimonials[index] = { ...newTestimonials[index], 
+       
+      }
+  }
+
+      ...current,
+        ...current.testimonia
+      }
+  }
+  const remove
+      ...current,
+        ...current.testimonials,
+      }
+  }
+  c
+
+      return {
+        faq: { ...current.faq,
+    })
+
+    setContent((current) 
+      faq: {
+       
+    }))
+
 
   const removeAboutCredential = (index: number) => {
     setContent((current) => ({
-      ...current,
+        items: cu
       about: {
         ...current.about,
         credentials: current.about.credentials.filter((_, i) => i !== index)
@@ -222,11 +222,11 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     setContent((current) => ({
       ...current,
       services: {
-        ...current.services,
+          <div className="fl
         items: [...current.services.items, { icon: "", title: "", description: "" }]
-      }
+       
     }))
-  }
+   
 
   const removeService = (index: number) => {
     setContent((current) => ({
@@ -240,7 +240,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
   const updateTestimonial = (index: number, field: "text" | "author" | "role", value: string) => {
     setContent((current) => {
-      const newTestimonials = [...current.testimonials.testimonials]
+            <TabsTrigger value="testimonials">Depoimentos</TabsTrigg
       newTestimonials[index] = { ...newTestimonials[index], [field]: value }
       return {
         ...current,
@@ -250,19 +250,19 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
   }
 
   const addTestimonial = () => {
-    setContent((current) => ({
+            </div>
       ...current,
-      testimonials: {
+              <Input
         ...current.testimonials,
         testimonials: [...current.testimonials.testimonials, { text: "", author: "", role: "" }]
       }
-    }))
+       
   }
 
   const removeTestimonial = (index: number) => {
     setContent((current) => ({
       ...current,
-      testimonials: {
+            </div>
         ...current.testimonials,
         testimonials: current.testimonials.testimonials.filter((_, i) => i !== index)
       }
@@ -274,38 +274,38 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       const newFAQs = [...current.faq.items]
       newFAQs[index] = { ...newFAQs[index], [field]: value }
       return {
-        ...current,
+                onC
         faq: { ...current.faq, items: newFAQs }
-      }
+       
     })
-  }
+   
 
-  const addFAQ = () => {
+                onChange
     setContent((current) => ({
-      ...current,
+              />
       faq: {
         ...current.faq,
         items: [...current.faq.items, { question: "", answer: "" }]
-      }
+       
     }))
-  }
+   
 
   const removeFAQ = (index: number) => {
     setContent((current) => ({
-      ...current,
+              <di
       faq: {
-        ...current.faq,
+                    <Te
         items: current.faq.items.filter((_, i) => i !== index)
-      }
+       
     }))
-  }
+   
 
   const updateContact = (field: keyof SiteContent["contact"], value: string) => {
     setContent((current) => ({
-      ...current,
+                 
       contact: { ...current.contact, [field]: value }
-    }))
-  }
+       
+   
 
   const updateFooter = (field: keyof SiteContent["footer"], value: string) => {
     setContent((current) => ({
@@ -314,7 +314,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     }))
   }
 
-  return (
+          
     <div className="min-h-screen bg-background py-8 px-6">
       <Card className="max-w-5xl mx-auto p-6">
         <div className="flex items-center justify-between mb-8">
@@ -356,7 +356,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 onChange={(e) => updateHero("title", e.target.value)}
                 className="mt-2"
               />
-            </div>
+              <Lab
             <div>
               <Label htmlFor="hero-subtitle" className="text-base font-semibold">Subtítulo</Label>
               <Input
@@ -427,16 +427,16 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                       onChange={(e) => updateAboutBio(index, e.target.value)}
                       placeholder={`Parágrafo ${index + 1}`}
                       className="flex-1"
-                    />
+                      
                     <Button
-                      type="button"
+                value={content.faq.
                       variant="destructive"
                       size="icon"
                       onClick={() => removeAboutBioParagraph(index)}
-                    >
+                <Butt
                       <Trash weight="bold" />
-                    </Button>
-                  </div>
+          </TabsContent>
+              />
                 ))}
               </div>
             </div>
@@ -821,5 +821,5 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
         </Tabs>
       </Card>
     </div>
-  )
+
 }
