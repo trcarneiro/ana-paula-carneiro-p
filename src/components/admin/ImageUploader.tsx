@@ -1,24 +1,24 @@
 import { useRef, useState } from "react"
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Label } from "@/components/ui/label"
+import { Upload, ImageIcon, Trash } from "@phosphor-icons/react"
+import { toast } from "sonner"
 
-  label: string
-
-  maxSizeMB?: number
+interface ImageUploaderProps {
   label: string
   value?: string
   onChange: (value: string | undefined) => void
   aspectRatio?: "square" | "portrait" | "wide"
   maxSizeMB?: number
- 
+}
 
 export function ImageUploader({
-      to
+  label,
   value,
-    setIsLo
+  onChange,
   aspectRatio = "square",
-      const img
+  maxSizeMB = 5,
 }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -32,14 +32,14 @@ export function ImageUploader({
       return
     }
 
-          if (width > 
+    setIsLoading(true)
 
     const reader = new FileReader()
     reader.onload = (e) => {
-          }
-    }
+      const img = new Image()
+      img.onload = () => {
         const canvas = document.createElement("canvas")
-    if (fileInputRef.current) {
+        const ctx = canvas.getContext("2d")
         if (!ctx) {
           toast.error("Erro ao processar imagem")
           setIsLoading(false)
@@ -48,16 +48,16 @@ export function ImageUploader({
 
         const maxDimension = 1200
         let width = img.width
-  const aspectRatioClass = {
+        let height = img.height
 
         if (width > maxDimension || height > maxDimension) {
           if (width > height) {
             height = (height * maxDimension) / width
             width = maxDimension
           } else {
-          </div>
+            width = (width * maxDimension) / height
             height = maxDimension
-           
+          }
         }
 
         canvas.width = width
@@ -65,9 +65,9 @@ export function ImageUploader({
         ctx.drawImage(img, 0, 0, width, height)
 
         const base64 = canvas.toDataURL("image/jpeg", 0.85)
-            </Button>
+        onChange(base64)
         setIsLoading(false)
-       
+      }
 
       img.onerror = () => {
         toast.error("Erro ao carregar imagem")
@@ -75,7 +75,7 @@ export function ImageUploader({
       }
 
       img.src = e.target?.result as string
-     
+    }
 
     reader.onerror = () => {
       toast.error("Erro ao ler arquivo")
@@ -84,9 +84,9 @@ export function ImageUploader({
 
     reader.readAsDataURL(file)
 
-
+    if (fileInputRef.current) {
       fileInputRef.current.value = ""
-
+    }
   }
 
   const handleClick = () => {
@@ -104,9 +104,10 @@ export function ImageUploader({
   }[aspectRatio]
 
   return (
-
+    <div className="space-y-3">
       <Label className="text-base font-semibold">{label}</Label>
 
+      {value ? (
         <div className="space-y-3">
           <div className={`relative ${aspectRatioClass} w-full max-w-xs overflow-hidden rounded-lg border`}>
             <img
@@ -114,9 +115,9 @@ export function ImageUploader({
               alt={label}
               className="w-full h-full object-cover"
             />
-
+          </div>
           <div className="flex gap-2">
-
+            <Button
               type="button"
               variant="outline"
               onClick={handleClick}
@@ -124,20 +125,21 @@ export function ImageUploader({
               className="gap-2"
             >
               <ImageIcon size={16} weight="bold" />
-
+              Trocar Imagem
             </Button>
-
+            <Button
               type="button"
-
+              variant="destructive"
               onClick={handleRemove}
               disabled={isLoading}
               className="gap-2"
             >
-
+              <Trash size={16} weight="bold" />
+              Remover
             </Button>
-
+          </div>
         </div>
-
+      ) : (
         <button
           type="button"
           onClick={handleClick}
@@ -151,12 +153,13 @@ export function ImageUploader({
         </button>
       )}
 
+      <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
         onChange={handleFileChange}
         className="hidden"
-
+      />
     </div>
-
+  )
 }
