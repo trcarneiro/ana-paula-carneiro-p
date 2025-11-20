@@ -5,16 +5,16 @@ import { Label } from "@/components/ui/label"
 import { Upload, Trash, Image as ImageIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
-interface ImageUploaderProps {
   value?: string
-  onChange: (value: string | undefined) => void
-  label: string
-  aspectRatio?: "square" | "portrait" | "wide"
-  maxSizeMB?: number
-}
-
+  value?: string
 export function ImageUploader({
-  value,
+  onChange,
+  aspectRatio = "square",
+}: ImageUploaderProp
+ 
+
+    if (!file) return
+    if (
   onChange,
   label,
   aspectRatio = "square",
@@ -29,13 +29,13 @@ export function ImageUploader({
 
     if (!file.type.startsWith("image/")) {
       toast.error("Por favor, selecione uma imagem válida")
-      return
-    }
+          to
+
 
     if (file.size > maxSizeMB * 1024 * 1024) {
       toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
       return
-    }
+    r
 
     setIsLoading(true)
 
@@ -84,7 +84,7 @@ export function ImageUploader({
   }
 
   const handleUploadClick = () => {
-    fileInputRef.current?.click()
+            >
   }
 
   const handleRemove = () => {
@@ -96,22 +96,22 @@ export function ImageUploader({
   }
 
   const aspectRatioClass = {
-    square: "aspect-square",
+            </p>
     portrait: "aspect-[3/4]",
     wide: "aspect-[16/9]"
   }[aspectRatio]
 
   return (
-    <div className="space-y-3">
+        className="hidden"
       <Label className="text-base font-semibold">{label}</Label>
       {value ? (
         <Card className="overflow-hidden">
           <div className={`relative ${aspectRatioClass} w-full`}>
-            <img
+
               src={value}
-              alt={label}
+
               className="w-full h-full object-cover"
-            />
+
           </div>
           <div className="p-3 flex gap-2">
             <Button
@@ -124,24 +124,24 @@ export function ImageUploader({
             >
               <Upload size={16} weight="bold" />
               Alterar
-            </Button>
+
             <Button
               type="button"
               size="sm"
               variant="destructive"
-              onClick={handleRemove}
+
               className="gap-2 flex-1"
             >
               <Trash size={16} weight="bold" />
               Remover
             </Button>
-          </div>
+
         </Card>
       ) : (
         <Card
           className={`${aspectRatioClass} w-full flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors`}
           onClick={handleUploadClick}
-        >
+
           <div className="text-center p-8">
             <ImageIcon size={48} weight="duotone" className="mx-auto mb-3 text-muted-foreground" />
             <p className="text-sm text-muted-foreground mb-2">
@@ -151,10 +151,10 @@ export function ImageUploader({
               Máximo {maxSizeMB}MB
             </p>
           </div>
-        </Card>
+
       )}
       <input
-        ref={fileInputRef}
+
         type="file"
         accept="image/*"
         onChange={handleFileSelect}
@@ -162,4 +162,4 @@ export function ImageUploader({
       />
     </div>
   )
-}
+
