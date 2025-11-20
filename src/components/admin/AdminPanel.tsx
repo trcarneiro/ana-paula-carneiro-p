@@ -16,7 +16,6 @@ import {
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { SiteContent, defaultSiteContent } from "@/lib/types"
-import { ImageUploader } from "./ImageUploader"
 
 interface AdminPanelProps {
   onClose: () => void
@@ -264,11 +263,13 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
               <TabsContent value="hero" className="space-y-6">
                 <div>
-                  <ImageUploader
-                    label="Foto de Perfil (Hero)"
+                  <Label htmlFor="hero-profile-image" className="text-base font-semibold">URL da Foto de Perfil (Hero)</Label>
+                  <Input
+                    id="hero-profile-image"
                     value={content.hero.profileImage}
-                    onChange={(image) => updateHero("profileImage", image || "")}
-                    aspectRatio="portrait"
+                    onChange={(e) => updateHero("profileImage", e.target.value)}
+                    className="mt-2"
+                    placeholder="https://exemplo.com/foto.jpg"
                   />
                 </div>
                 <div>
@@ -313,11 +314,13 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
               <TabsContent value="about" className="space-y-6">
                 <div>
-                  <ImageUploader
-                    label="Foto de Perfil (Sobre)"
+                  <Label htmlFor="about-profile-image" className="text-base font-semibold">URL da Foto de Perfil (Sobre)</Label>
+                  <Input
+                    id="about-profile-image"
                     value={content.about.profileImage}
-                    onChange={(image) => updateAbout("profileImage", image || "")}
-                    aspectRatio="portrait"
+                    onChange={(e) => updateAbout("profileImage", e.target.value)}
+                    className="mt-2"
+                    placeholder="https://exemplo.com/foto.jpg"
                   />
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
@@ -472,13 +475,16 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                       <Card key={index} className="p-4">
                         <div className="flex gap-4">
                           <div className="flex-1 space-y-4">
-                            <ImageUploader
-                              label={`Ícone do Serviço ${index + 1}`}
-                              value={service.icon}
-                              onChange={(image) => updateService(index, "icon", image)}
-                              aspectRatio="square"
-                              maxSizeMB={1}
-                            />
+                            <div>
+                              <Label htmlFor={`service-icon-${index}`} className="text-base font-semibold">URL do Ícone do Serviço {index + 1}</Label>
+                              <Input
+                                id={`service-icon-${index}`}
+                                value={service.icon || ""}
+                                onChange={(e) => updateService(index, "icon", e.target.value)}
+                                className="mt-2"
+                                placeholder="https://exemplo.com/icone.jpg"
+                              />
+                            </div>
                             <Input
                               value={service.title}
                               onChange={(e) => updateService(index, "title", e.target.value)}
