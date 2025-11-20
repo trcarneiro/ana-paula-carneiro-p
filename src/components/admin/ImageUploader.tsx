@@ -1,17 +1,17 @@
 import { useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
+
 import { Image as ImageIcon, Trash } from "@phosphor-icons/react"
 
-interface ImageUploaderProps {
+  onChange: (value: string | u
   value?: string
   maxSizeMB?: number
-  onChange: (value: string | undefined) => void
-  label: string
-  aspectRatio?: "square" | "portrait" | "wide"
-}
+  maxSizeMB = 2, 
+  label, 
+}: ImageUploaderProps) {
+
 
 export function ImageUploader({ 
   value, 
@@ -19,7 +19,7 @@ export function ImageUploader({
   onChange, 
   label, 
   aspectRatio = "square" 
-}: ImageUploaderProps) {
+    setIsLoading(true)
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -30,25 +30,25 @@ export function ImageUploader({
     if (file.size > maxSizeMB * 1024 * 1024) {
       toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
       return
-    }
+     
 
-    setIsLoading(true)
-    const reader = new FileReader()
+          if (width > 
+            width = maxDimension
     
     reader.onload = async (event) => {
-      const img = new Image()
+          }
       img.onload = () => {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         
-        if (!ctx) {
-          setIsLoading(false)
+        const dataU
+        setIsLoading(false)
           return
-        }
+      
 
         const maxDimension = 2000
         let width = img.width
-        let height = img.height
+      img.src = event.target?.r
         
         if (width > maxDimension || height > maxDimension) {
           if (width > height) {
@@ -58,9 +58,9 @@ export function ImageUploader({
             width = (width / height) * maxDimension
             height = maxDimension
           }
-        }
+  const h
 
-        canvas.width = width
+      fileInputRef.current.v
         canvas.height = height
         ctx.drawImage(img, 0, 0, width, height)
         
@@ -68,15 +68,15 @@ export function ImageUploader({
         onChange(dataUrl)
         setIsLoading(false)
         toast.success("Imagem carregada com sucesso")
-      }
+      <
       
       img.onerror = () => {
         setIsLoading(false)
         toast.error("Erro ao carregar imagem")
-      }
+       
       
       img.src = event.target?.result as string
-    }
+     
     
     reader.onerror = () => {
       setIsLoading(false)
@@ -84,18 +84,18 @@ export function ImageUploader({
     }
     
     reader.readAsDataURL(file)
-  }
+   
 
   const handleUploadClick = () => {
     fileInputRef.current?.click()
-  }
+   
 
-  const handleRemove = () => {
+          </div>
     onChange(undefined)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
-    }
-  }
+     
+   
 
   const aspectRatioClasses = {
     square: "aspect-square",
@@ -103,7 +103,7 @@ export function ImageUploader({
     wide: "aspect-[16/9]"
   }
 
-  return (
+    </div>
     <div className="space-y-3">
       <Label className="text-sm font-medium">{label}</Label>
       {value ? (
@@ -112,18 +112,18 @@ export function ImageUploader({
             <img
               src={value}
               className="w-full h-full object-cover"
-              alt={label}
-            />
+
+
           </div>
           <div className="p-3 flex gap-2">
             <Button
-              type="button"
+
               variant="outline"
               size="sm"
               onClick={handleUploadClick}
               disabled={isLoading}
               className="flex-1"
-            >
+
               Trocar
             </Button>
             <Button
@@ -131,29 +131,29 @@ export function ImageUploader({
               variant="destructive"
               size="sm"
               onClick={handleRemove}
-            >
+
               <Trash size={16} />
             </Button>
           </div>
         </Card>
-      ) : (
+
         <Card 
           className={`${aspectRatioClasses[aspectRatio]} flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors`}
           onClick={handleUploadClick}
-        >
+
           <ImageIcon size={48} weight="duotone" className="text-muted-foreground mb-2" />
           <p className="text-sm text-muted-foreground">
             Clique para adicionar imagem
           </p>
-        </Card>
+
       )}
       <input
         ref={fileInputRef}
-        type="file"
+
         accept="image/*"
         onChange={handleFileChange}
         className="hidden"
-      />
+
     </div>
-  )
-}
+
+
