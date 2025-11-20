@@ -13,16 +13,26 @@ A professional website for psychoanalyst Ana Paula Carneiro that converts visito
 ## Essential Features
 
 ### Admin Backend Panel (NEW)
-- **Functionality**: Comprehensive content management system for the site owner to edit all text content, configure contact information, and manage site data without code
-- **Purpose**: Empowers the site owner to keep content fresh and accurate, update contact details, adjust services, and manage testimonials independently
+- **Functionality**: Comprehensive content management system for the site owner to edit all text content, configure contact information, manage site data, and upload images (profile photos and service icons) without code
+- **Purpose**: Empowers the site owner to keep content fresh and accurate, update contact details, adjust services, manage testimonials, and customize visual branding independently
 - **Trigger**: Site owner clicks floating admin button (gear icon) visible only to authenticated owner
-- **Progression**: Owner authenticates → Opens admin panel → Selects section tab (Hero, About, Services, Testimonials, FAQ, Contact, Footer) → Edits content fields → Saves changes → Content updates instantly across site
+- **Progression**: Owner authenticates → Opens admin panel → Selects section tab (Hero, About, Services, Testimonials, FAQ, Contact, Footer) → Edits content fields → Uploads/manages images → Saves changes → Content updates instantly across site
 - **Success criteria**: 
   - Authentication using Spark user API (only site owner can access)
   - Tabbed interface for editing different sections
   - Real-time content updates using Spark KV persistence
   - Add/remove/edit items in lists (services, testimonials, FAQs, credentials)
   - All text fields editable including titles, descriptions, contact info
+  - **Image upload capability for:**
+    - Profile photo in Hero section (portrait aspect ratio, circular display)
+    - Profile photo in About section (portrait aspect ratio, rounded corners)
+    - Service icons (square aspect ratio, displayed in service cards)
+  - **Image processing features:**
+    - Client-side image compression and resizing (max 1200px dimension)
+    - Base64 encoding for storage in Spark KV
+    - File type validation (JPG, PNG, WebP)
+    - Size limit validation (2MB for profile photos, 1MB for icons)
+    - Preview before upload with replace/remove options
   - Save confirmation with toast notifications
   - Preview button to exit admin mode and view changes
 

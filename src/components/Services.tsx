@@ -58,8 +58,16 @@ export function Services() {
               <motion.div key={index} variants={itemVariants}>
                 <Card className="p-8 h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-card">
                   <div className="flex flex-col h-full">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
-                      <Icon size={28} className="text-accent" weight="duotone" />
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 overflow-hidden">
+                      {service.icon ? (
+                        <img 
+                          src={service.icon} 
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Icon size={28} className="text-accent" weight="duotone" />
+                      )}
                     </div>
                     <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
                     <p className="text-muted-foreground leading-relaxed flex-grow">

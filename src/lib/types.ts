@@ -3,6 +3,7 @@ export interface HeroContent {
   description: string
   ctaPrimary: string
   ctaSecondary: string
+  profileImage?: string
 }
 
 export interface AboutContent {
@@ -14,11 +15,13 @@ export interface AboutContent {
     title: string
     description: string
   }>
+  profileImage?: string
 }
 
 export interface Service {
   title: string
   description: string
+  icon?: string
 }
 
 export interface ServicesContent {

@@ -19,6 +19,23 @@ export function Hero() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="max-w-4xl mx-auto text-center space-y-8"
       >
+        {content.hero.profileImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center mb-8"
+          >
+            <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden shadow-xl ring-4 ring-primary/20">
+              <img 
+                src={content.hero.profileImage} 
+                alt="Ana Paula Carneiro"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+        )}
+        
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
           {content.hero.headline.split("autoconhecimento")[0]}
           <span className="text-accent">autoconhecimento</span>

@@ -16,6 +16,7 @@ import {
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { SiteContent, defaultSiteContent } from "@/lib/types"
+import { ImageUploader } from "./ImageUploader"
 
 interface AdminPanelProps {
   onClose: () => void
@@ -107,7 +108,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     }))
   }
 
-  const updateService = (index: number, field: "title" | "description", value: string) => {
+  const updateService = (index: number, field: "title" | "description" | "icon", value: string | undefined) => {
     setContent((current) => {
       const newServices = [...current.services.services]
       newServices[index] = { ...newServices[index], [field]: value }
@@ -123,7 +124,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       services: {
         ...current.services,
-        services: [...current.services.services, { title: "", description: "" }]
+        services: [...current.services.services, { title: "", description: "", icon: undefined }]
       }
     }))
   }
@@ -263,6 +264,14 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
               <TabsContent value="hero" className="space-y-6">
                 <div>
+                  <ImageUploader
+                    label="Foto de Perfil (Hero)"
+                    value={content.hero.profileImage}
+                    onChange={(image) => updateHero("profileImage", image || "")}
+                    aspectRatio="portrait"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="hero-headline" className="text-base font-semibold">Título Principal</Label>
                   <Input
                     id="hero-headline"
@@ -303,6 +312,14 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               </TabsContent>
 
               <TabsContent value="about" className="space-y-6">
+                <div>
+                  <ImageUploader
+                    label="Foto de Perfil (Sobre)"
+                    value={content.about.profileImage}
+                    onChange={(image) => updateAbout("profileImage", image || "")}
+                    aspectRatio="portrait"
+                  />
+                </div>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="about-title" className="text-base font-semibold">Título da Seção</Label>
@@ -454,7 +471,14 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                     {content.services.services.map((service, index) => (
                       <Card key={index} className="p-4">
                         <div className="flex gap-4">
-                          <div className="flex-1 space-y-3">
+                          <div className="flex-1 space-y-4">
+                            <ImageUploader
+                              label={`Ícone do Serviço ${index + 1}`}
+                              value={service.icon}
+                              onChange={(image) => updateService(index, "icon", image)}
+                              aspectRatio="square"
+                              maxSizeMB={1}
+                            />
                             <Input
                               value={service.title}
                               onChange={(e) => updateService(index, "title", e.target.value)}

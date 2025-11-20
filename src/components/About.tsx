@@ -33,7 +33,19 @@ export function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6"
           >
+            {content.about.profileImage && (
+              <div className="flex justify-center md:justify-start mb-6">
+                <div className="w-56 h-72 rounded-2xl overflow-hidden shadow-xl ring-4 ring-primary/20">
+                  <img 
+                    src={content.about.profileImage} 
+                    alt={content.about.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
             <Card className="p-8 shadow-lg">
               <h3 className="text-2xl font-semibold mb-6">{content.about.name}</h3>
               <div className="space-y-4 text-foreground/90 leading-relaxed">
