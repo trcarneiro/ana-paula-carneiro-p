@@ -1,11 +1,11 @@
 import { useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
-import { Upload, Trash, Image as ImageIcon } from "@phosphor-icons/react"
-import { toast } from "sonner"
+  label: string
+  onChange: (value: string | u
 
-interface ImageUploaderProps {
+
   label: string
   value: string | undefined
   onChange: (value: string | undefined) => void
@@ -14,11 +14,11 @@ interface ImageUploaderProps {
 }
 
 export function ImageUploader({
-  label,
+
   value,
-  onChange,
+    if (!fi
   aspectRatio = "square",
-  maxSizeMB = 2,
+      toast.erro
 }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +30,7 @@ export function ImageUploader({
     if (!file.type.startsWith("image/")) {
       toast.error("Por favor, selecione um arquivo de imagem válido")
       return
-    }
+
 
     if (file.size > maxSizeMB * 1024 * 1024) {
       toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
@@ -42,13 +42,13 @@ export function ImageUploader({
 
     reader.onload = (event) => {
       const img = new Image()
-      img.onload = () => {
+        canvas.height = he
         const canvas = document.createElement("canvas")
-        const ctx = canvas.getContext("2d")
+        const base64 = canvas.toDataURL("im
         if (!ctx) return
 
         let width = img.width
-        let height = img.height
+      img.onerror = () => {
         const maxDimension = 1200
 
         if (width > height) {
@@ -56,11 +56,11 @@ export function ImageUploader({
             height = (height * maxDimension) / width
             width = maxDimension
           }
-        } else {
+
           if (height > maxDimension) {
-            width = (width * maxDimension) / height
+
             height = maxDimension
-          }
+      fileI
         }
 
         canvas.width = width
@@ -68,10 +68,10 @@ export function ImageUploader({
         ctx.drawImage(img, 0, 0, width, height)
 
         const base64 = canvas.toDataURL("image/jpeg", 0.85)
-        onChange(base64)
+    wide: "aspect-video"
         setIsLoading(false)
         toast.success("Imagem carregada com sucesso!")
-      }
+      {
 
       img.onerror = () => {
         toast.error("Erro ao carregar a imagem")
@@ -79,7 +79,7 @@ export function ImageUploader({
       }
 
       img.src = event.target?.result as string
-    }
+     
 
     reader.onerror = () => {
       toast.error("Erro ao ler o arquivo")
@@ -90,9 +90,9 @@ export function ImageUploader({
   }
 
   const handleClick = () => {
-    if (fileInputRef.current) {
+              <Trash size={16} 
       fileInputRef.current.value = ""
-    }
+     
     fileInputRef.current?.click()
   }
 
@@ -104,13 +104,13 @@ export function ImageUploader({
   const aspectRatioClass = {
     square: "aspect-square",
     wide: "aspect-video",
-    portrait: "aspect-[3/4]",
+      )}
   }[aspectRatio]
 
   return (
-    <div className="space-y-2">
+        className="hidden"
       <Label className="text-base font-semibold">{label}</Label>
-      {value ? (
+  )
         <Card className="overflow-hidden">
           <div className={`relative ${aspectRatioClass} w-full`}>
             <img
@@ -118,9 +118,9 @@ export function ImageUploader({
               alt={label}
               className="w-full h-full object-cover"
             />
-          </div>
+
           <div className="p-4 flex gap-2">
-            <Button
+
               type="button"
               onClick={handleClick}
               variant="outline"
@@ -128,21 +128,21 @@ export function ImageUploader({
               disabled={isLoading}
             >
               <ImageIcon className="mr-2" size={16} />
-              Alterar Imagem
+
             </Button>
-            <Button
+
               type="button"
-              variant="destructive"
+
               onClick={handleRemove}
               disabled={isLoading}
             >
-              <Trash size={16} />
+
             </Button>
-          </div>
+
         </Card>
-      ) : (
+
         <Card className="border-2 border-dashed hover:border-primary/50 transition-colors">
-          <button
+
             type="button"
             onClick={handleClick}
             disabled={isLoading}
@@ -158,13 +158,13 @@ export function ImageUploader({
           </button>
         </Card>
       )}
-      <input
+
         ref={fileInputRef}
         type="file"
         accept="image/*"
         onChange={handleFileChange}
         className="hidden"
-      />
+
     </div>
-  )
+
 }
