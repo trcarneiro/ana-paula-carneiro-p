@@ -1,11 +1,11 @@
 import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
-import { Upload, Trash, Image as ImageIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
-
 interface ImageUploaderProps {
+  value?: string
+
+}
   label: string
   value?: string
   onChange: (base64Image: string | undefined) => void
@@ -30,102 +30,102 @@ export function ImageUploader({
     if (!file.type.startsWith('image/')) {
       toast.error("Por favor, selecione um arquivo de imagem válido")
       return
-    }
 
-    const maxSize = maxSizeMB * 1024 * 1024
-    if (file.size > maxSize) {
-      toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
-      return
-    }
 
-    setIsLoading(true)
-    const reader = new FileReader()
-    
     reader.onload = (e) => {
-      const img = new Image()
       img.onload = () => {
-        const canvas = document.createElement('canvas')
         let width = img.width
-        let height = img.height
         
-        const maxDimension = 1200
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = (height / width) * maxDimension
-            width = maxDimension
+     
+
           } else {
-            width = (width / height) * maxDimension
             height = maxDimension
-          }
-        }
-        
+    
         canvas.width = width
-        canvas.height = height
         
-        const ctx = canvas.getContext('2d')
         if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height)
-          const base64 = canvas.toDataURL('image/jpeg', 0.85)
-          onChange(base64)
-          toast.success("Imagem carregada com sucesso!")
-        }
+          const base64 = canvas.toDataURL('image/jpeg',
+          toast.success("Imag
         setIsLoading(false)
-      }
       
-      img.onerror = () => {
-        toast.error("Erro ao processar a imagem")
-        setIsLoading(false)
+        toast.error("Erro ao proc
       }
-      
-      img.src = e.target?.result as string
-    }
+      img.src = e.target?.resul
     
-    reader.onerror = () => {
-      toast.error("Erro ao ler o arquivo")
-      setIsLoading(false)
+      toast.error("Erro ao ler o
     }
-    
     reader.readAsDataURL(file)
-    
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
     }
-  }
 
-  const handleRemove = () => {
-    onChange(undefined)
-    toast.success("Imagem removida")
+    onCh
   }
-
   const handleClick = () => {
-    fileInputRef.current?.click()
   }
-
   const aspectRatioClass = {
-    square: "aspect-square",
-    portrait: "aspect-[3/4]",
-    landscape: "aspect-[16/9]"
+    portrait: "asp
   }[aspectRatio]
-
   return (
-    <div className="space-y-3">
-      <Label className="text-base font-semibold">{label}</Label>
-      
+      <Label className="te
       <div className="flex gap-4 items-start">
-        <Card 
-          className={`${aspectRatioClass} w-48 overflow-hidden bg-muted flex items-center justify-center cursor-pointer hover:bg-muted/80 transition-colors border-2 border-dashed`}
-          onClick={value ? undefined : handleClick}
+         
         >
-          {value ? (
-            <img 
-              src={value} 
-              alt={label}
-              className="w-full h-full object-cover"
+       
+      
             />
-          ) : (
             <div className="text-center p-4">
-              <ImageIcon size={48} className="mx-auto mb-2 text-muted-foreground" weight="duotone" />
-              <p className="text-sm text-muted-foreground">
+              <p className=
+       
+      
+
+     
+    
+            onClick={handleC
+            className="gap-2"
+            <Upload weigh
+     
+    
+              type="button"
+    
+              className="gap-2"
+              <Trash weight="bold" />
+     
+
+
+          </p>
+      </div>
+      <input
+   
+
+      />
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 {isLoading ? "Carregando..." : "Clique para adicionar"}
               </p>
             </div>
