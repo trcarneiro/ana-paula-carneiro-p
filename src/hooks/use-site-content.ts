@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { SiteContent } from '@/lib/types'
 import contentData from '@/data/site-content.json'
 
