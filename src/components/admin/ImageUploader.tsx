@@ -2,22 +2,22 @@ import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Upload, Image as ImageIcon, Trash } from "@phosphor-icons/react"
-interface ImageUploaderProps {
+import { toast } from "sonner"
 
-  aspectRatio?: "square" | "wi
+interface ImageUploaderProps {
   value?: string
   onChange: (value: string | undefined) => void
   label: string
-  aspectRatio?: "square" | "wide"
+  aspectRatio?: "square" | "portrait" | "wide"
   maxSizeMB?: number
- 
+}
 
 export function ImageUploader({
   value,
-    }
+  onChange,
   label,
   aspectRatio = "square",
-    }
+  maxSizeMB = 2,
 }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -29,12 +29,12 @@ export function ImageUploader({
     if (file.size > maxSizeMB * 1024 * 1024) {
       toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
       return
-
+    }
 
     if (!file.type.startsWith("image/")) {
       toast.error("Por favor, selecione uma imagem válida")
       return
-     
+    }
 
     setIsLoading(true)
 
@@ -49,7 +49,7 @@ export function ImageUploader({
             setIsLoading(false)
             toast.error("Erro ao processar imagem")
             return
-
+          }
 
           const maxDimension = 1200
           let width = img.width
@@ -79,18 +79,16 @@ export function ImageUploader({
           toast.error("Erro ao processar imagem")
         }
         img.src = event.target?.result as string
-       
+      }
       reader.readAsDataURL(file)
     } catch (error) {
       setIsLoading(false)
       toast.error("Erro ao carregar imagem")
-     
+    }
   }
 
   const handleClick = () => {
-
-      fileInputRef.current.click()
-
+    fileInputRef.current?.click()
   }
 
   const handleRemove = () => {
@@ -103,14 +101,15 @@ export function ImageUploader({
 
   const aspectClasses = {
     square: "aspect-square",
+    portrait: "aspect-[3/4]",
     wide: "aspect-video",
   }
 
   return (
-
+    <div className="space-y-3">
       <label className="text-sm font-medium">{label}</label>
 
-
+      {value ? (
         <Card className="overflow-hidden">
           <div className={`relative ${aspectClasses[aspectRatio]} w-full`}>
             <img
@@ -118,9 +117,9 @@ export function ImageUploader({
               alt={label}
               className="w-full h-full object-cover"
             />
-
+          </div>
           <div className="flex gap-2 p-3 border-t">
-
+            <Button
               type="button"
               variant="outline"
               onClick={handleClick}
@@ -128,21 +127,20 @@ export function ImageUploader({
               className="gap-2 flex-1"
             >
               <Upload size={16} weight="bold" />
-
+              Alterar
             </Button>
-
+            <Button
               type="button"
-
+              variant="destructive"
               onClick={handleRemove}
               disabled={isLoading}
               className="gap-2"
             >
-
-
+              <Trash size={16} weight="bold" />
             </Button>
-
+          </div>
         </Card>
-
+      ) : (
         <Card
           className={`${aspectClasses[aspectRatio]} w-full cursor-pointer hover:bg-muted/50 transition-colors border-dashed`}
           onClick={handleClick}
@@ -161,13 +159,13 @@ export function ImageUploader({
         </Card>
       )}
 
-
+      <input
         ref={fileInputRef}
         type="file"
         onChange={handleFileSelect}
         accept="image/*"
         className="hidden"
-
+      />
     </div>
-
+  )
 }
