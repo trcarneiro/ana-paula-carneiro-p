@@ -1,11 +1,11 @@
 import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Upload, Trash } from "@phosphor-icons/react"
 import { toast } from "sonner"
-interface ImageUploaderProps {
-  value?: string
 
-}
+interface ImageUploaderProps {
   label: string
   value?: string
   onChange: (base64Image: string | undefined) => void
@@ -30,104 +30,99 @@ export function ImageUploader({
     if (!file.type.startsWith('image/')) {
       toast.error("Por favor, selecione um arquivo de imagem válido")
       return
+    }
 
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      toast.error(`A imagem deve ter no máximo ${maxSizeMB}MB`)
+      return
+    }
 
-    reader.onload = (e) => {
-      img.onload = () => {
-        let width = img.width
-        
-     
-
-          } else {
-            height = maxDimension
+    setIsLoading(true)
+    const reader = new FileReader()
     
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const maxDimension = 1200
+        let width = img.width
+        let height = img.height
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = (height / width) * maxDimension
+            width = maxDimension
+          } else {
+            width = (width / height) * maxDimension
+            height = maxDimension
+          }
+        }
+
+        const canvas = document.createElement('canvas')
         canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
         
         if (ctx) {
-          const base64 = canvas.toDataURL('image/jpeg',
-          toast.success("Imag
+          ctx.drawImage(img, 0, 0, width, height)
+          const base64 = canvas.toDataURL('image/jpeg', 0.85)
+          onChange(base64)
+          toast.success("Imagem carregada com sucesso!")
+        }
         setIsLoading(false)
-      
-        toast.error("Erro ao proc
       }
-      img.src = e.target?.resul
+      img.onerror = () => {
+        toast.error("Erro ao processar a imagem")
+        setIsLoading(false)
+      }
+      img.src = e.target?.result as string
+    }
     
-      toast.error("Erro ao ler o
+    reader.onerror = () => {
+      toast.error("Erro ao ler o arquivo")
+      setIsLoading(false)
     }
     reader.readAsDataURL(file)
+    
     if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
-
-    onCh
   }
+
+  const handleRemove = () => {
+    onChange(undefined)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   const handleClick = () => {
+    fileInputRef.current?.click()
   }
+
   const aspectRatioClass = {
-    portrait: "asp
+    square: "aspect-square",
+    portrait: "aspect-[3/4]",
+    landscape: "aspect-[4/3]"
   }[aspectRatio]
+
   return (
-      <Label className="te
+    <div className="space-y-2">
+      <Label className="text-sm font-medium">{label}</Label>
       <div className="flex gap-4 items-start">
-         
-        >
-       
-      
+        <Card className={`${aspectRatioClass} w-48 overflow-hidden cursor-pointer hover:border-primary transition-colors`} onClick={handleClick}>
+          {value ? (
+            <img 
+              src={value} 
+              alt={label}
+              className="w-full h-full object-cover"
             />
-            <div className="text-center p-4">
-              <p className=
-       
-      
-
-     
-    
-            onClick={handleC
-            className="gap-2"
-            <Upload weigh
-     
-    
-              type="button"
-    
-              className="gap-2"
-              <Trash weight="bold" />
-     
-
-
-          </p>
-      </div>
-      <input
-   
-
-      />
-  )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                {isLoading ? "Carregando..." : "Clique para adicionar"}
-              </p>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-muted">
+              <div className="text-center p-4">
+                <p className="text-sm text-muted-foreground">
+                  {isLoading ? "Carregando..." : "Clique para adicionar"}
+                </p>
+              </div>
             </div>
           )}
         </Card>
