@@ -7,8 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Phone, Envelope, WhatsappLogo, PaperPlaneRight } from "@phosphor-icons/react"
 import { toast } from "sonner"
+import { useKV } from "@github/spark/hooks"
+import { defaultSiteContent, SiteContent } from "@/lib/types"
 
 export function Contact() {
+  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -52,21 +55,21 @@ export function Contact() {
     {
       icon: WhatsappLogo,
       label: "WhatsApp",
-      value: "(11) 99999-9999",
-      href: "https://wa.me/5511999999999",
+      value: content.contact.phone,
+      href: `https://wa.me/${content.contact.whatsappNumber}`,
       primary: true
     },
     {
       icon: Phone,
       label: "Telefone",
-      value: "(11) 99999-9999",
-      href: "tel:+5511999999999"
+      value: content.contact.phone,
+      href: `tel:+${content.contact.whatsappNumber}`
     },
     {
       icon: Envelope,
       label: "E-mail",
-      value: "contato@anapaulacarneiro.com.br",
-      href: "mailto:contato@anapaulacarneiro.com.br"
+      value: content.contact.email,
+      href: `mailto:${content.contact.email}`
     }
   ]
 
@@ -81,10 +84,10 @@ export function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4">
-            Entre em Contato
+            {content.contact.title}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Dê o primeiro passo em direção ao autoconhecimento. Estou aqui para acolher você.
+            {content.contact.subtitle}
           </p>
         </motion.div>
 
@@ -128,10 +131,9 @@ export function Contact() {
             </div>
 
             <Card className="p-6 bg-muted/50">
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 <strong className="text-foreground block mb-2">Horário de Atendimento</strong>
-                Segunda a Sexta: 8h às 20h<br />
-                Sábado: 8h às 14h
+                {content.contact.scheduleText}
               </p>
             </Card>
           </motion.div>

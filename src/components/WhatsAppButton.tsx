@@ -1,9 +1,13 @@
 import { WhatsappLogo } from "@phosphor-icons/react"
+import { useKV } from "@github/spark/hooks"
+import { defaultSiteContent, SiteContent } from "@/lib/types"
 
 export function WhatsAppButton() {
+  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+
   return (
     <a
-      href="https://wa.me/5511999999999"
+      href={`https://wa.me/${content.contact.whatsappNumber}`}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"

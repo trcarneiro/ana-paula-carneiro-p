@@ -1,16 +1,30 @@
 # Planning Guide
 
-A professional website for psychoanalyst Ana Paula Carneiro that converts visitors into clients through trust-building content and clear contact pathways while optimizing for organic search visibility.
+A professional website for psychoanalyst Ana Paula Carneiro that converts visitors into clients through trust-building content and clear contact pathways while optimizing for organic search visibility. **Includes a comprehensive admin backend for content management.**
 
 **Experience Qualities**:
 1. **Welcoming** - The site should feel like a safe, comfortable space that reduces anxiety about seeking help
 2. **Professional** - Establishes credibility and expertise through thoughtful design and clear credentials
 3. **Intimate** - Creates a personal connection through authentic storytelling without feeling sterile or corporate
 
-**Complexity Level**: Content Showcase (information-focused)
-- The primary goal is to present information about Ana Paula's practice, approach, and qualifications in a way that builds trust and encourages contact, with simple contact form functionality.
+**Complexity Level**: Light Application (multiple features with basic state)
+- The primary goal is to present information about Ana Paula's practice, approach, and qualifications in a way that builds trust and encourages contact, with simple contact form functionality. **Now includes a full admin panel for the site owner to configure all texts, data, and images without touching code.**
 
 ## Essential Features
+
+### Admin Backend Panel (NEW)
+- **Functionality**: Comprehensive content management system for the site owner to edit all text content, configure contact information, and manage site data without code
+- **Purpose**: Empowers the site owner to keep content fresh and accurate, update contact details, adjust services, and manage testimonials independently
+- **Trigger**: Site owner clicks floating admin button (gear icon) visible only to authenticated owner
+- **Progression**: Owner authenticates → Opens admin panel → Selects section tab (Hero, About, Services, Testimonials, FAQ, Contact, Footer) → Edits content fields → Saves changes → Content updates instantly across site
+- **Success criteria**: 
+  - Authentication using Spark user API (only site owner can access)
+  - Tabbed interface for editing different sections
+  - Real-time content updates using Spark KV persistence
+  - Add/remove/edit items in lists (services, testimonials, FAQs, credentials)
+  - All text fields editable including titles, descriptions, contact info
+  - Save confirmation with toast notifications
+  - Preview button to exit admin mode and view changes
 
 ### Hero Section with Clear Value Proposition
 - **Functionality**: Immediately communicates who Ana Paula is and how she helps clients

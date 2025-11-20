@@ -1,15 +1,19 @@
+import { useKV } from "@github/spark/hooks"
+import { defaultSiteContent, SiteContent } from "@/lib/types"
+
 export function Footer() {
+  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+
   return (
     <footer className="bg-foreground text-background py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="font-semibold text-xl mb-4" style={{ fontFamily: 'Crimson Pro, serif' }}>
-              Ana Paula Carneiro
+              {content.footer.name}
             </h3>
             <p className="text-background/80 text-sm leading-relaxed">
-              Psicanalista dedicada ao acolhimento e escuta atenta, 
-              oferecendo um espaço seguro para o autoconhecimento.
+              {content.footer.description}
             </p>
           </div>
 
@@ -35,18 +39,17 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Contato</h4>
             <div className="space-y-2 text-sm text-background/80">
               <p>
-                <a href="tel:+5511999999999" className="hover:text-background transition-colors">
-                  (11) 99999-9999
+                <a href={`tel:+${content.contact.whatsappNumber}`} className="hover:text-background transition-colors">
+                  {content.footer.phone}
                 </a>
               </p>
               <p>
-                <a href="mailto:contato@anapaulacarneiro.com.br" className="hover:text-background transition-colors">
-                  contato@anapaulacarneiro.com.br
+                <a href={`mailto:${content.footer.email}`} className="hover:text-background transition-colors">
+                  {content.footer.email}
                 </a>
               </p>
-              <p className="pt-2">
-                Segunda a Sexta: 8h às 20h<br />
-                Sábado: 8h às 14h
+              <p className="pt-2 whitespace-pre-line">
+                {content.footer.schedule}
               </p>
             </div>
           </div>
@@ -54,10 +57,10 @@ export function Footer() {
 
         <div className="pt-8 border-t border-background/20 text-center text-sm text-background/60">
           <p>
-            © {new Date().getFullYear()} Ana Paula Carneiro. Todos os direitos reservados.
+            © {new Date().getFullYear()} {content.footer.name}. Todos os direitos reservados.
           </p>
           <p className="mt-2">
-            CRP: 00/00000 | Atendimento presencial e online
+            {content.footer.crp}
           </p>
         </div>
       </div>

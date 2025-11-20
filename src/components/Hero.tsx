@@ -1,8 +1,12 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "@phosphor-icons/react"
+import { useKV } from "@github/spark/hooks"
+import { defaultSiteContent, SiteContent } from "@/lib/types"
 
 export function Hero() {
+  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+
   const scrollToContact = () => {
     document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -16,13 +20,13 @@ export function Hero() {
         className="max-w-4xl mx-auto text-center space-y-8"
       >
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
-          Um espaço seguro para o seu{" "}
+          {content.hero.headline.split("autoconhecimento")[0]}
           <span className="text-accent">autoconhecimento</span>
+          {content.hero.headline.split("autoconhecimento")[1]}
         </h1>
         
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Psicanalista dedicada a acolher suas questões mais profundas, 
-          oferecendo escuta atenta e cuidado no processo de transformação pessoal.
+          {content.hero.description}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -31,7 +35,7 @@ export function Hero() {
             className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
             onClick={scrollToContact}
           >
-            Agendar Consulta
+            {content.hero.ctaPrimary}
             <ArrowRight weight="bold" />
           </Button>
           
@@ -41,7 +45,7 @@ export function Hero() {
             className="border-2 hover:bg-secondary/50"
             onClick={() => document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Conheça Meu Trabalho
+            {content.hero.ctaSecondary}
           </Button>
         </div>
       </motion.div>
