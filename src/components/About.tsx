@@ -3,13 +3,6 @@ import { Card } from "@/components/ui/card"
 import { GraduationCap, Certificate, Heart } from "@phosphor-icons/react"
 
 export function About() {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 30 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-100px" },
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
-
   const credentials = [
     {
       icon: GraduationCap,
@@ -31,7 +24,13 @@ export function About() {
   return (
     <section id="sobre" className="py-24 px-6 bg-card">
       <div className="max-w-6xl mx-auto">
-        <motion.div {...fadeInUp} className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4">
             Sobre Mim
           </h2>

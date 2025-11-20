@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,19 +7,8 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Phone, Envelope, WhatsappLogo, PaperPlaneRight } from "@phosphor-icons/react"
 import { toast } from "sonner"
-import { useKV } from "@github/spark/hooks"
-
-interface ContactMessage {
-  id: string
-  name: string
-  email: string
-  phone: string
-  message: string
-  date: string
-}
 
 export function Contact() {
-  const [messages, setMessages] = useKV<ContactMessage[]>("contact-messages", [])
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -44,14 +33,6 @@ export function Contact() {
       setIsSubmitting(false)
       return
     }
-
-    const newMessage: ContactMessage = {
-      id: Date.now().toString(),
-      ...formData,
-      date: new Date().toISOString()
-    }
-
-    setMessages((current) => [...(current || []), newMessage])
 
     toast.success("Mensagem enviada com sucesso! Em breve entrarei em contato.", {
       duration: 5000
