@@ -2,12 +2,14 @@
 
 ## Architecture & Project Structure
 - **Framework**: React 19 + Vite + TypeScript.
+- **Type**: Single Page Application (SPA) with a scrollable landing page layout.
 - **Styling**: Tailwind CSS v4 (using `@tailwindcss/vite`).
-- **UI Library**: Shadcn UI-like structure.
+- **UI Library**: Shadcn UI-like structure (Radix UI primitives + Tailwind).
   - Reusable primitives in `src/components/ui/`.
-  - Feature components in `src/components/`.
+  - Feature components in `src/components/` (e.g., `Hero.tsx`, `Contact.tsx`).
   - Admin components in `src/components/admin/`.
-- **Spark Integration**: Uses `@github/spark` for platform features (e.g., `spark.user()`).
+- **Data Persistence**: Uses `@github/spark/hooks` (`useKV`) for dynamic site content (e.g., text, images).
+- **Auth/Permissions**: Uses `spark.user()` to determine ownership (`isOwner`) and conditionally render the Admin Panel.
 - **Entry Point**: `src/main.tsx` mounts `App.tsx`.
 
 ## Conventions & Patterns
@@ -28,14 +30,23 @@
 - Follow Tailwind v4 conventions.
 - Theme variables are defined in `src/index.css` or `src/styles/theme.css`.
 
-### State & Data
-- Use `useState` for local UI state.
-- Use `@tanstack/react-query` for server state if fetching external data.
-- `spark` global object is available for user context (e.g., `spark.user()`).
+### State & Data Management
+- **Local State**: Use `useState` for simple UI state and form handling (e.g., `Contact.tsx`, `AdminPanel.tsx`).
+- **Persistent State**: Use `useKV` hook for site content that needs to be editable via the Admin Panel.
+  ```tsx
+  import { useKV } from "@github/spark/hooks"
+  // ...
+  const [content, setContent] = useKV("site-content", defaultContent)
+  ```
+- **User Context**: Use `spark.user()` to check for `isOwner` status.
+
+### Forms
+- Prefer `useState` for form state management as seen in existing components.
+- `react-hook-form` and `zod` are available in dependencies if complex validation is required, but simple controlled inputs are the current pattern.
 
 ### Icons
-- Primary: `@phosphor-icons/react`.
-- Secondary: `lucide-react` (often used by Shadcn components).
+- **Primary**: `@phosphor-icons/react` (e.g., `<GearSix />`, `<WhatsappLogo />`).
+- **Secondary**: `lucide-react` (mostly used within Shadcn UI components).
 
 ## Workflows
 - **Development**: `npm run dev` (starts Vite server).
@@ -44,5 +55,6 @@
 
 ## Key Files
 - `src/lib/utils.ts`: Contains the `cn` utility.
-- `src/App.tsx`: Main layout and routing logic (including Admin toggle).
+- `src/App.tsx`: Main layout, conditional Admin rendering, and `spark.user()` check.
+- `src/components/admin/AdminPanel.tsx`: Example of `useKV` for content management.
 - `vite.config.ts`: Vite configuration with Spark and Tailwind plugins.

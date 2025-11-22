@@ -1,8 +1,7 @@
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 export function Footer() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
 
   return (
     <footer className="bg-foreground text-background py-12 px-6">

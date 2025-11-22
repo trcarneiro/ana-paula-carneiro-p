@@ -1,8 +1,10 @@
-import { useKV } from "@github/spark/hooks"
+import { useState, useEffect } from "react"
+import { useSiteContent } from "@/hooks/use-site-content"
+import { SiteContent } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
@@ -13,118 +15,13 @@ import {
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
-interface SiteContent {
-  hero: {
-    title: string
-    subtitle: string
-    ctaText: string
-  }
-  about: {
-    title: string
-    subtitle: string
-    profileImage: string
-    bio: string[]
-    credentials: Array<{ title: string; description: string }>
-  }
-  services: {
-    title: string
-    subtitle: string
-    items: Array<{ icon: string; title: string; description: string }>
-  }
-  testimonials: {
-    title: string
-    subtitle: string
-    testimonials: Array<{ text: string; author: string; role: string }>
-  }
-  faq: {
-    title: string
-    subtitle: string
-    items: Array<{ question: string; answer: string }>
-  }
-  contact: {
-    title: string
-    subtitle: string
-    whatsapp: string
-    phone: string
-    email: string
-    address: string
-  }
-  footer: {
-    name: string
-    crp: string
-    description: string
-    phone: string
-    email: string
-    copyright: string
-  }
-}
-
-const defaultContent: SiteContent = {
-  hero: {
-    title: "Ana Paula Carneiro",
-    subtitle: "Psicanalista | Acolhimento e Escuta Terapêutica",
-    ctaText: "Agende sua Consulta"
-  },
-  about: {
-    title: "Sobre Mim",
-    subtitle: "Conheça minha trajetória",
-    profileImage: "",
-    bio: [
-      "Sou Ana Paula Carneiro, psicanalista dedicada ao acolhimento e à escuta terapêutica.",
-      "Minha prática é fundamentada na psicanálise clássica e contemporânea."
-    ],
-    credentials: [
-      { title: "Formação em Psicanálise", description: "Instituto Brasileiro de Psicanálise" },
-      { title: "Especialização Clínica", description: "Atendimento a adultos e adolescentes" }
-    ]
-  },
-  services: {
-    title: "Serviços",
-    subtitle: "Como posso ajudar você",
-    items: [
-      { icon: "User", title: "Terapia Individual", description: "Atendimento personalizado" },
-      { icon: "Users", title: "Terapia de Casal", description: "Fortalecimento de vínculos" }
-    ]
-  },
-  testimonials: {
-    title: "Depoimentos",
-    subtitle: "O que dizem meus pacientes",
-    testimonials: [
-      { text: "Excelente profissional, muito atenciosa.", author: "Maria S.", role: "Paciente" }
-    ]
-  },
-  faq: {
-    title: "Perguntas Frequentes",
-    subtitle: "Tire suas dúvidas",
-    items: [
-      { question: "Como funciona a primeira consulta?", answer: "A primeira consulta é um momento de conhecimento mútuo." }
-    ]
-  },
-  contact: {
-    title: "Entre em Contato",
-    subtitle: "Estou aqui para ajudar",
-    whatsapp: "+55 11 99999-9999",
-    phone: "+55 11 3333-3333",
-    email: "contato@exemplo.com",
-    address: "São Paulo, SP"
-  },
-  footer: {
-    name: "Ana Paula Carneiro",
-    crp: "CRP 06/123456",
-    description: "Psicanalista dedicada ao cuidado e acolhimento.",
-    phone: "+55 11 99999-9999",
-    email: "contato@exemplo.com",
-    copyright: "© 2024 Ana Paula Carneiro. Todos os direitos reservados."
-  }
-}
-
 interface AdminPanelProps {
   onClose: () => void
   onPreview: () => void
 }
 
 export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
-  const [content, setContent] = useKV<SiteContent>("site-content", defaultContent)
+  const [content, setContent] = useSiteContent()
 
   const handleSave = () => {
     toast.success("Alterações salvas com sucesso!")
@@ -137,14 +34,14 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     }))
   }
 
-  const updateAbout = (field: keyof SiteContent["about"], value: string) => {
+  const updateAbout = (field: string, value: string | string[]) => {
     setContent((current) => ({
       ...current,
       about: { ...current.about, [field]: value }
     }))
   }
 
-  const updateBio = (index: number, value: string) => {
+  const updateAboutBio = (index: number, value: string) => {
     setContent((current) => {
       const newBio = [...current.about.bio]
       newBio[index] = value
@@ -155,21 +52,27 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     })
   }
 
-  const addBio = () => {
+  const addAboutBioParagraph = () => {
     setContent((current) => ({
       ...current,
-      about: { ...current.about, bio: [...current.about.bio, ""] }
+      about: {
+        ...current.about,
+        bio: [...current.about.bio, ""]
+      }
     }))
   }
 
-  const removeBio = (index: number) => {
+  const removeAboutBioParagraph = (index: number) => {
     setContent((current) => ({
       ...current,
-      about: { ...current.about, bio: current.about.bio.filter((_, i) => i !== index) }
+      about: {
+        ...current.about,
+        bio: current.about.bio.filter((_, i) => i !== index)
+      }
     }))
   }
 
-  const updateCredential = (index: number, field: "title" | "description", value: string) => {
+  const updateAboutCredential = (index: number, field: "title" | "description", value: string) => {
     setContent((current) => {
       const newCredentials = [...current.about.credentials]
       newCredentials[index] = { ...newCredentials[index], [field]: value }
@@ -180,7 +83,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     })
   }
 
-  const addCredential = () => {
+  const addAboutCredential = () => {
     setContent((current) => ({
       ...current,
       about: {
@@ -190,7 +93,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
     }))
   }
 
-  const removeCredential = (index: number) => {
+  const removeAboutCredential = (index: number) => {
     setContent((current) => ({
       ...current,
       about: {
@@ -202,11 +105,11 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
   const updateService = (index: number, field: "icon" | "title" | "description", value: string) => {
     setContent((current) => {
-      const newServices = [...current.services.items]
+      const newServices = [...current.services.services]
       newServices[index] = { ...newServices[index], [field]: value }
       return {
         ...current,
-        services: { ...current.services, items: newServices }
+        services: { ...current.services, services: newServices }
       }
     })
   }
@@ -216,7 +119,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       services: {
         ...current.services,
-        items: [...current.services.items, { icon: "", title: "", description: "" }]
+        services: [...current.services.services, { icon: "", title: "", description: "" }]
       }
     }))
   }
@@ -226,12 +129,12 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       services: {
         ...current.services,
-        items: current.services.items.filter((_, i) => i !== index)
+        services: current.services.services.filter((_, i) => i !== index)
       }
     }))
   }
 
-  const updateTestimonial = (index: number, field: "text" | "author" | "role", value: string) => {
+  const updateTestimonial = (index: number, field: "text" | "author" | "context", value: string) => {
     setContent((current) => {
       const newTestimonials = [...current.testimonials.testimonials]
       newTestimonials[index] = { ...newTestimonials[index], [field]: value }
@@ -247,7 +150,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       testimonials: {
         ...current.testimonials,
-        testimonials: [...current.testimonials.testimonials, { text: "", author: "", role: "" }]
+        testimonials: [...current.testimonials.testimonials, { text: "", author: "", context: "" }]
       }
     }))
   }
@@ -264,11 +167,11 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
 
   const updateFAQ = (index: number, field: "question" | "answer", value: string) => {
     setContent((current) => {
-      const newFAQs = [...current.faq.items]
+      const newFAQs = [...current.faq.faqs]
       newFAQs[index] = { ...newFAQs[index], [field]: value }
       return {
         ...current,
-        faq: { ...current.faq, items: newFAQs }
+        faq: { ...current.faq, faqs: newFAQs }
       }
     })
   }
@@ -278,7 +181,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       faq: {
         ...current.faq,
-        items: [...current.faq.items, { question: "", answer: "" }]
+        faqs: [...current.faq.faqs, { question: "", answer: "" }]
       }
     }))
   }
@@ -288,11 +191,10 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
       ...current,
       faq: {
         ...current.faq,
-        items: current.faq.items.filter((_, i) => i !== index)
+        faqs: current.faq.faqs.filter((_, i) => i !== index)
       }
     }))
   }
-   
 
   const updateContact = (field: keyof SiteContent["contact"], value: string) => {
     setContent((current) => ({
@@ -322,13 +224,6 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               Salvar
             </Button>
             <Button
-              variant="secondary"
-              onClick={onPreview}
-              className="gap-2"
-            >
-              Visualizar
-            </Button>
-            <Button
               variant="outline"
               onClick={onClose}
             >
@@ -353,8 +248,8 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               <Label htmlFor="hero-title" className="text-base font-semibold">Título Principal</Label>
               <Input
                 id="hero-title"
-                value={content.hero.title}
-                onChange={(e) => updateHero("title", e.target.value)}
+                value={content.hero.headline}
+                onChange={(e) => updateHero("headline", e.target.value)}
                 className="mt-2"
               />
             </div>
@@ -362,8 +257,8 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               <Label htmlFor="hero-subtitle" className="text-base font-semibold">Subtítulo</Label>
               <Input
                 id="hero-subtitle"
-                value={content.hero.subtitle}
-                onChange={(e) => updateHero("subtitle", e.target.value)}
+                value={content.hero.description}
+                onChange={(e) => updateHero("description", e.target.value)}
                 className="mt-2"
               />
             </div>
@@ -371,8 +266,8 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               <Label htmlFor="hero-cta" className="text-base font-semibold">Texto do Botão</Label>
               <Input
                 id="hero-cta"
-                value={content.hero.ctaText}
-                onChange={(e) => updateHero("ctaText", e.target.value)}
+                value={content.hero.ctaPrimary}
+                onChange={(e) => updateHero("ctaPrimary", e.target.value)}
                 className="mt-2"
               />
             </div>
@@ -401,7 +296,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               <Label htmlFor="about-profile-image" className="text-base font-semibold">URL da Imagem de Perfil</Label>
               <Input
                 id="about-profile-image"
-                value={content.about.profileImage}
+                value={content.about.profileImage || ""}
                 onChange={(e) => updateAbout("profileImage", e.target.value)}
                 className="mt-2"
                 placeholder="https://exemplo.com/imagem.jpg"
@@ -413,7 +308,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 <Button
                   type="button"
                   size="sm"
-                  onClick={addBio}
+                  onClick={addAboutBioParagraph}
                   className="gap-2"
                 >
                   <Plus weight="bold" />
@@ -425,14 +320,15 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                   <div key={index} className="flex gap-2">
                     <Textarea
                       value={paragraph}
-                      onChange={(e) => updateBio(index, e.target.value)}
+                      onChange={(e) => updateAboutBio(index, e.target.value)}
                       placeholder={`Parágrafo ${index + 1}`}
                       className="flex-1"
                     />
                     <Button
+                      type="button"
                       variant="destructive"
                       size="icon"
-                      onClick={() => removeBio(index)}
+                      onClick={() => removeAboutBioParagraph(index)}
                     >
                       <Trash weight="bold" />
                     </Button>
@@ -446,7 +342,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 <Button
                   type="button"
                   size="sm"
-                  onClick={addCredential}
+                  onClick={addAboutCredential}
                   className="gap-2"
                 >
                   <Plus weight="bold" />
@@ -460,12 +356,12 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                       <div className="flex-1 space-y-3">
                         <Input
                           value={credential.title}
-                          onChange={(e) => updateCredential(index, "title", e.target.value)}
+                          onChange={(e) => updateAboutCredential(index, "title", e.target.value)}
                           placeholder="Título"
                         />
                         <Input
                           value={credential.description}
-                          onChange={(e) => updateCredential(index, "description", e.target.value)}
+                          onChange={(e) => updateAboutCredential(index, "description", e.target.value)}
                           placeholder="Descrição"
                         />
                       </div>
@@ -473,7 +369,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                         type="button"
                         variant="destructive"
                         size="icon"
-                        onClick={() => removeCredential(index)}
+                        onClick={() => removeAboutCredential(index)}
                       >
                         <Trash weight="bold" />
                       </Button>
@@ -523,13 +419,13 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 </Button>
               </div>
               <div className="space-y-3">
-                {content.services.items.map((service, index) => (
+                {content.services.services.map((service, index) => (
                   <Card key={index} className="p-4">
                     <div className="flex gap-3">
                       <div className="flex-1 space-y-3">
                         <Input
                           id={`service-icon-${index}`}
-                          value={service.icon}
+                          value={service.icon || ""}
                           onChange={(e) => updateService(index, "icon", e.target.value)}
                           placeholder="Ícone (ex: User)"
                         />
@@ -613,8 +509,8 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                           placeholder="Nome do autor"
                         />
                         <Input
-                          value={testimonial.role}
-                          onChange={(e) => updateTestimonial(index, "role", e.target.value)}
+                          value={testimonial.context}
+                          onChange={(e) => updateTestimonial(index, "context", e.target.value)}
                           placeholder="Função/Relação (ex: Paciente)"
                         />
                       </div>
@@ -672,7 +568,7 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 </Button>
               </div>
               <div className="space-y-3">
-                {content.faq.items.map((item, index) => (
+                {content.faq.faqs.map((item, index) => (
                   <Card key={index} className="p-4">
                     <div className="flex gap-3">
                       <div className="flex-1 space-y-3">
@@ -726,8 +622,8 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
                 <Label htmlFor="contact-whatsapp" className="text-base font-semibold">WhatsApp</Label>
                 <Input
                   id="contact-whatsapp"
-                  value={content.contact.whatsapp}
-                  onChange={(e) => updateContact("whatsapp", e.target.value)}
+                  value={content.contact.whatsappNumber}
+                  onChange={(e) => updateContact("whatsappNumber", e.target.value)}
                   className="mt-2"
                 />
               </div>
@@ -751,11 +647,11 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               </div>
             </div>
             <div>
-              <Label htmlFor="contact-address" className="text-base font-semibold">Endereço</Label>
+              <Label htmlFor="contact-address" className="text-base font-semibold">Horário de Atendimento</Label>
               <Textarea
                 id="contact-address"
-                value={content.contact.address}
-                onChange={(e) => updateContact("address", e.target.value)}
+                value={content.contact.scheduleText}
+                onChange={(e) => updateContact("scheduleText", e.target.value)}
                 className="mt-2"
               />
             </div>
@@ -809,11 +705,11 @@ export function AdminPanel({ onClose, onPreview }: AdminPanelProps) {
               />
             </div>
             <div>
-              <Label htmlFor="footer-copyright" className="text-base font-semibold">Copyright</Label>
+              <Label htmlFor="footer-copyright" className="text-base font-semibold">Horário</Label>
               <Textarea
                 id="footer-copyright"
-                value={content.footer.copyright}
-                onChange={(e) => updateFooter("copyright", e.target.value)}
+                value={content.footer.schedule}
+                onChange={(e) => updateFooter("schedule", e.target.value)}
                 className="mt-2"
               />
             </div>

@@ -1,11 +1,10 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "@phosphor-icons/react"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 export function Hero() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
 
   const scrollToContact = () => {
     document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })

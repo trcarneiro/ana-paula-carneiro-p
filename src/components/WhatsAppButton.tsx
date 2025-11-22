@@ -1,9 +1,8 @@
 import { WhatsappLogo } from "@phosphor-icons/react"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 export function WhatsAppButton() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
 
   return (
     <a

@@ -7,11 +7,10 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Phone, Envelope, WhatsappLogo, PaperPlaneRight } from "@phosphor-icons/react"
 import { toast } from "sonner"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 export function Contact() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
   const [formData, setFormData] = useState({
     name: "",
     email: "",

@@ -2,11 +2,10 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Quotes } from "@phosphor-icons/react"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 export function Testimonials() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {

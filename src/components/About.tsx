@@ -1,13 +1,12 @@
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { GraduationCap, Certificate, Heart } from "@phosphor-icons/react"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 const iconMap = [GraduationCap, Certificate, Heart]
 
 export function About() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
 
   return (
     <section id="sobre" className="py-24 px-6 bg-card">

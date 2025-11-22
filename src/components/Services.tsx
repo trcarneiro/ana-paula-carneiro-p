@@ -1,13 +1,12 @@
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Brain, Heart, Users, Path, Flower, Sparkle } from "@phosphor-icons/react"
-import { useKV } from "@github/spark/hooks"
-import { defaultSiteContent, SiteContent } from "@/lib/types"
+import { useSiteContent } from "@/hooks/use-site-content"
 
 const iconMap = [Brain, Heart, Users, Path, Flower, Sparkle]
 
 export function Services() {
-  const [content] = useKV<SiteContent>("site-content", defaultSiteContent)
+  const [content] = useSiteContent()
 
   const containerVariants = {
     hidden: {},
